@@ -14,8 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageListener implements EventListener{
-    //private Logger logger = LoggerFactory.getLogger(getClass());
-    private static Pattern pattern = Pattern.compile("\\(+((\\w|\\W)*)+\\)");
+    private static Pattern pattern = Pattern.compile("^\\(+((\\w|\\W)*)+\\)+$");
     private static Matcher matcher;
 
 
@@ -26,15 +25,12 @@ public class MessageListener implements EventListener{
     }
 
     private void onMessage(MessageReceivedEvent event){
-        //logger.info("Message {} entrant", event.getMessage().getContent());
 
         matcher = pattern.matcher(event.getMessage().getContent());
         if(matcher.find()){
             System.out.println("Message va être supprimé");
-            //logger.info("Le message va être supprimé");
             final ScheduledExecutorService deleteTimer = Executors.newScheduledThreadPool(1);
             deleteTimer.scheduleAtFixedRate(new DeleteMessage(event), 8, 15, TimeUnit.MINUTES);
-            //logger.info("Message supprimé");
         }
     }
 }
