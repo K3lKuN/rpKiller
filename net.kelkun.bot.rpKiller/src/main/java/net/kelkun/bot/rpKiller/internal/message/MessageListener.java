@@ -1,12 +1,10 @@
-package net.kelkun.bor.rpKiller.internal.message;
+package net.kelkun.bot.rpKiller.internal.message;
 
 import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.EventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.kelkun.bot.rpKiller.internal.listener.MessageDeleteEventListener;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +27,21 @@ public class MessageListener implements EventListener{
         matcher = pattern.matcher(event.getMessage().getContent());
         if(matcher.find()){
             System.out.println("Message va être supprimé");
+            DeleteMessage deleteMessage = new DeleteMessage(event);
+
             final ScheduledExecutorService deleteTimer = Executors.newScheduledThreadPool(1);
-            deleteTimer.scheduleAtFixedRate(new DeleteMessage(event), 8, 15, TimeUnit.MINUTES);
+            deleteTimer.scheduleAtFixedRate(deleteMessage, 8, 15, TimeUnit.MINUTES);
+
+            deleteMessage.addMessageDeleteEventListener(new MessageDeleteEventListener() {
+                public void messageDelete() {
+                    System.out.println("Message supprimé correctement");
+                    try{
+                        deleteTimer.shutdown();
+                    }catch (Exception e){
+                        System.out.println("Impossible de détruire le timer : "+e);
+                    }
+                }
+            });
         }
     }
 }

@@ -1,11 +1,11 @@
-package net.kelkun.bor.rpKiller.internal;
+package net.kelkun.bot.rpKiller.internal;
 
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import net.kelkun.bor.rpKiller.internal.message.MessageListener;
+import net.kelkun.bot.rpKiller.internal.message.MessageListener;
 
 public class BotManager extends ListenerAdapter{
     String token;
@@ -14,10 +14,6 @@ public class BotManager extends ListenerAdapter{
 
     public BotManager(String token){
         this.token = token;
-    }
-
-    BotManager(){
-
     }
 
     /**
