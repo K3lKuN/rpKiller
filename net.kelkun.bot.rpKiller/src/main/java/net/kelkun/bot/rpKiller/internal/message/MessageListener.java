@@ -13,7 +13,9 @@ import java.util.regex.Pattern;
 
 public class MessageListener implements EventListener{
     private static Pattern pattern = Pattern.compile("^\\(+((\\w|\\W)*)+\\)+$");
+    private static Pattern commandPattern = Pattern.compile("^(::)");
     private static Matcher matcher;
+    private ComandLine comandLine = new ComandLine();
 
 
     public void onEvent(Event event) {
@@ -26,7 +28,7 @@ public class MessageListener implements EventListener{
 
         matcher = pattern.matcher(event.getMessage().getContent());
         if(matcher.find()){
-            System.out.println("Message va être supprimé");
+            System.out.println("Message va être supprimé : "+event.getMessage().getContent());
             DeleteMessage deleteMessage = new DeleteMessage(event);
 
             final ScheduledExecutorService deleteTimer = Executors.newScheduledThreadPool(1);
@@ -42,6 +44,12 @@ public class MessageListener implements EventListener{
                     }
                 }
             });
+        }
+
+        matcher = commandPattern.matcher(event.getMessage().getContent());
+        if(matcher.find()){
+            System.out.println("comand line on "+event.getMessage().getChannel()+" comand : "+event.getMessage().getContent());
+            comandLine.process(event);
         }
     }
 }

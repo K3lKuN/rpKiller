@@ -17,6 +17,7 @@ public class DeleteMessage implements Runnable {
             fireMessageDelete();
         }catch (Exception e){
             System.out.println("impossible de supprimer le message : "+e);
+            fireMessageDelete();
         }
     }
 
